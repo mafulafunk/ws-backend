@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const PORT = 4000;
 const todoRoutes = express.Router();
 const Todo = require('./todo.model');
+const dbURI = 'mongodb://mongo:27017/ws-todos';
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -59,12 +60,35 @@ todoRoutes.route('/update/:id').post(function(req, res) {
     });
 });
 
-mongoose.connect('mongodb://127.0.0.1:27017/ws-todos', { useNewUrlParser: true });
-const connection = mongoose.connection;
+const db = mongoose.connection;
 
-connection.once('open', function() {
-    console.log("MongoDB database connection established successfully");
-})
+db.on('connecting', function() {
+    console.log('connecting to MongoDB...');
+  });
+
+  db.on('error', function(error) {
+    console.error('Error in MongoDb connection: ' + error);
+    mongoose.disconnect();
+  });
+  db.on('connected', function() {
+    console.log('MongoDB connected!');
+  });
+  db.once('open', function() {
+    console.log('MongoDB connection opened!');
+  });
+  db.on('reconnected', function () {
+    console.log('MongoDB reconnected!');
+  });
+  db.on('disconnected', function() {
+    console.log('MongoDB disconnected!');
+    mongoose.connect(dbURI, {server:{auto_reconnect:true}});
+  });
+
+  mongoose.connect(dbURI, 
+    {
+      useNewUrlParser: true,
+      server: {auto_reconnect:true }
+    });
 
 app.listen(PORT, function() {
     console.log("Server is running on Port: " + PORT);
