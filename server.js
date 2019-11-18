@@ -10,6 +10,7 @@ const dbURI = 'mongodb://mongo:27017/ws-todos';
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use('/todos', require('./auth.js'));
 app.use('/todos', todoRoutes);
 
 todoRoutes.route('/').get(function(req, res) {
