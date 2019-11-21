@@ -12,7 +12,12 @@ module.exports = function(req, res, next) {
              * The token contains user's id ( it can contain more informations )
              * and this is saved in req.user object
              */
-            req.user = jwt.verify(req.headers['authorization'], config.JWT_SECRET);
+            let token = req.headers['authorization']; // Express headers are auto converted to lowercase
+            if (token.startsWith('Bearer ')) {
+              // Remove Bearer from string
+              token = token.slice(7, token.length);
+            }
+            req.user = jwt.verify(token, config.JWT_SECRET);
         } catch(err) {
             /*
              * If the authorization header is corrupted, it throws exception
@@ -20,7 +25,9 @@ module.exports = function(req, res, next) {
              */
             return res.status(401).json({
                 error: {
-                    msg: 'Failed to authenticate token!'
+                    msg: 'Failed to authenticate token!',
+                    name: err.name,
+                    message: err.message
                 }
             });
         }
