@@ -1,11 +1,11 @@
 var jwt = require('jsonwebtoken');
-var config = require('./config.js');
+var config = require('./config/config.js');
 
-module.exports = function(req, res, next) {
+module.exports = function (req, res, next) {
     /*
      * Check if authorization header is set
      */
-    if( req.hasOwnProperty('headers') && req.headers.hasOwnProperty('authorization') ) {
+    if (req.hasOwnProperty('headers') && req.headers.hasOwnProperty('authorization')) {
         try {
             /*
              * Try to decode & verify the JWT token
@@ -14,11 +14,11 @@ module.exports = function(req, res, next) {
              */
             let token = req.headers['authorization']; // Express headers are auto converted to lowercase
             if (token.startsWith('Bearer ')) {
-              // Remove Bearer from string
-              token = token.slice(7, token.length);
+                // Remove Bearer from string
+                token = token.slice(7, token.length);
             }
             req.user = jwt.verify(token, config.JWT_SECRET);
-        } catch(err) {
+        } catch (err) {
             /*
              * If the authorization header is corrupted, it throws exception
              * So return 401 status code with JSON error message
