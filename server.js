@@ -5,7 +5,6 @@ const cors = require('cors');
 const connectDB = require('./config/db');
 const PORT = 4000;
 const todoRoutes = require('./routes/todo');
-const Todo = require('./todo.model');
 
 app.use(cors());
 app.use(bodyParser.json());

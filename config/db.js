@@ -23,7 +23,8 @@ const connectDB = async () => {
     try {
         mongoose.connect(config.dbURI,
             {
-                useNewUrlParser: true
+                useNewUrlParser: true,
+                useUnifiedTopology: true
             });
     } catch (error) {
         console.error(error.message);

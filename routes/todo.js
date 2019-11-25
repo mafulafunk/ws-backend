@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Todo = require('../todo.model');
+const Todo = require('../model/todo');
 
 router.route('/').get(function (req, res) {
     Todo.find(function (err, todos) {
@@ -20,7 +20,7 @@ router.route('/:id').get(function (req, res) {
     });
 });
 
-router.route('/add').post(function (req, res) {
+router.route('/').post(function (req, res) {
     let todo = new Todo(req.body);
     todo.save()
         .then(todo => {
