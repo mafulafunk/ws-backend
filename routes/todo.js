@@ -6,6 +6,7 @@ router.route('/').get(function (req, res) {
     Todo.find(function (err, todos) {
         if (err) {
             console.log(err);
+            return res.send(err);
         } else {
             res.json(todos);
         }
