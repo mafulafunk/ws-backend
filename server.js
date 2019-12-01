@@ -1,18 +1,16 @@
 const express = require('express');
-const app = express();
-const bodyParser = require('body-parser');
 const cors = require('cors');
 const connectDB = require('./config/db');
-const PORT = 4000;
-const todoRoutes = require('./routes/todo');
 
-app.use(cors());
-app.use(bodyParser.json());
-app.use('/todos', require('./auth.js'));
-app.use('/todos', todoRoutes);
+const app = express();
 
 connectDB();
 
-app.listen(PORT, function () {
-    console.log("Server is running on Port: " + PORT);
-});
+app.use(cors());
+app.use(express.json());
+app.use('/todos', require('./auth'));
+app.use('/todos', require('./routes/todo'));
+
+const PORT = process.env.PORT || 4000;
+
+app.listen(PORT, () => console.log(`Server is running on Port: ${PORT}`));

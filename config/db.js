@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-var config = require('./config.js');
+var config = require('config');
 
 const db = mongoose.connection;
 
@@ -15,7 +15,7 @@ db.on('connected', function() {
 db.on('disconnected', function() {
   console.log('MongoDB disconnected!');
   setTimeout(function() {
-    mongoose.connect(config.dbURI, {
+    mongoose.connect(config.get('dbURI'), {
       server: { auto_reconnect: true }
     });
   }, 1000);
@@ -23,7 +23,7 @@ db.on('disconnected', function() {
 
 const connectDB = async () => {
   try {
-    mongoose.connect(config.dbURI, {
+    mongoose.connect(config.get('dbURI'), {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
