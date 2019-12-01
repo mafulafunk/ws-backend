@@ -8,7 +8,7 @@ connectDB();
 
 app.use(cors());
 app.use(express.json());
-app.use('/todos', require('./auth'));
+// app.use('/todos', require('./auth'));
 app.use('/todos', require('./routes/todo'));
 
 const PORT = process.env.PORT || 4000;

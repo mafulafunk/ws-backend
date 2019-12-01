@@ -1,16 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const Todo = require('../model/todo');
+const Todo = require('../model/Todo');
+const auth = require('../auth');
 
-router.route('/').get(function(req, res) {
-  Todo.find(function(err, todos) {
-    if (err) {
-      console.log(err);
-      return res.send(err);
-    } else {
-      res.json(todos);
-    }
-  });
+router.get('/', auth, async (req, res) => {
+  try {
+    const todos = await Todo.find();
+    return res.json(todos);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send('server errror');
+  }
 });
 
 router.route('/:id').get(function(req, res) {
